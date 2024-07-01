@@ -729,14 +729,6 @@ void GuiMenu::openDeveloperSettings()
 			ApiSystem::getInstance()->setOverscan(overscan_enabled->getState());
 		}
 	});
-
-	// es resolution
-	if (ApiSystem::getInstance()->isScriptingSupported(ApiSystem::RESOLUTION))
-	  {
-	    auto videoModeOptionList = createVideoResolutionModeOptionList(mWindow, "es", "resolution");
-	    s->addWithDescription(_("VIDEO MODE"), _("Sets the display's resolution for emulationstation."), videoModeOptionList);
-	    s->addSaveFunc([this, videoModeOptionList] { SystemConf::getInstance()->set("es.resolution", videoModeOptionList->getSelected()); });
-	  }
 #endif
 
 #ifdef _RPI_
@@ -1321,6 +1313,7 @@ void GuiMenu::openSystemSettings()
 	language_choice->add("EUSKARA",               "eu_ES", language == "eu_ES");
 	language_choice->add("SUOMI",                "fi_FI", language == "fi_FI");
 	language_choice->add("FRANÇAIS",             "fr_FR", language == "fr_FR" || language == "fr");
+	language_choice->add("GALEGO",               "gl_ES", language == "gl_ES");
 	language_choice->add("עברית",                "he_IL", language == "he_IL");
 	language_choice->add("HUNGARIAN",            "hu_HU", language == "hu_HU");
 	language_choice->add("BAHASA INDONESIA",     "id_ID", language == "id_ID");
@@ -1507,6 +1500,13 @@ void GuiMenu::openSystemSettings()
 				s->setVariable("exitreboot", true);
 			}
 		});
+	}
+	// es resolution
+	if (ApiSystem::getInstance()->isScriptingSupported(ApiSystem::RESOLUTION))
+	{
+	    auto videoModeOptionList = createVideoResolutionModeOptionList(mWindow, "es", "resolution");
+	    s->addWithDescription(_("VIDEO MODE"), _("Sets the display's resolution for emulationstation."), videoModeOptionList);
+	    s->addSaveFunc([this, videoModeOptionList] { SystemConf::getInstance()->set("es.resolution", videoModeOptionList->getSelected()); });
 	}
 #endif
 
