@@ -3494,6 +3494,34 @@ void GuiMenu::openThemeConfiguration(Window* mWindow, GuiComponent* s, std::shar
 					themeconfig->setVariable("reloadAll", true);
 			});
 
+		// Show trackball icons
+		auto defTI = Settings::getInstance()->getBool("ShowTrackballIconOnGames") ? _("YES") : _("NO");
+		auto curTI = Settings::getInstance()->getString(system->getName() + ".ShowTrackballIconOnGames");
+		auto showTrackball = std::make_shared<OptionListComponent<std::string>>(mWindow, _("SHOW TRACKBALL ICON"), false);
+		showTrackball->add(_("AUTO"), "", curTI == "" || curTI == "auto");
+		showTrackball->add(_("YES"), "1", curTI == "1");
+		showTrackball->add(_("NO"), "0", curTI == "0");
+		themeconfig->addWithDescription(_("SHOW TRACKBALL ICON"), _("DEFAULT VALUE") + " : " + defTI, showTrackball);
+		themeconfig->addSaveFunc([themeconfig, showTrackball, system]
+			{
+				if (Settings::getInstance()->setString(system->getName() + ".ShowTrackballIconOnGames", showTrackball->getSelected()))
+					themeconfig->setVariable("reloadAll", true);
+			});
+
+		// Show spinner icons
+		auto defSI = Settings::getInstance()->getBool("ShowSpinnerIconOnGames") ? _("YES") : _("NO");
+		auto curSI = Settings::getInstance()->getString(system->getName() + ".ShowSpinnerIconOnGames");
+		auto showSpinner = std::make_shared<OptionListComponent<std::string>>(mWindow, _("SHOW SPINNER ICON"), false);
+		showSpinner->add(_("AUTO"), "", curSI == "" || curSI == "auto");
+		showSpinner->add(_("YES"), "1", curSI == "1");
+		showSpinner->add(_("NO"), "0", curSI == "0");
+		themeconfig->addWithDescription(_("SHOW SPINNER ICON"), _("DEFAULT VALUE") + " : " + defSI, showSpinner);
+		themeconfig->addSaveFunc([themeconfig, showSpinner, system]
+			{
+				if (Settings::getInstance()->setString(system->getName() + ".ShowSpinnerIconOnGames", showSpinner->getSelected()))
+					themeconfig->setVariable("reloadAll", true);
+			});
+
 		// Show filenames
 		auto defFn = Settings::getInstance()->getBool("ShowFilenames") ? _("YES") : _("NO");
 		auto curFn = Settings::getInstance()->getString(system->getName() + ".ShowFilenames");
@@ -3834,6 +3862,8 @@ void GuiMenu::openUISettings()
 	s->addSwitch(_("SHOW RETROACHIEVEMENTS ICON"), "ShowCheevosIcon", true, [s] { s->setVariable("reloadAll", true); });
 	s->addSwitch(_("SHOW GUN ICON"), "ShowGunIconOnGames", true, [s] { s->setVariable("reloadAll", true); });
 	s->addSwitch(_("SHOW WHEEL ICON"), "ShowWheelIconOnGames", true, [s] { s->setVariable("reloadAll", true); });
+	s->addSwitch(_("SHOW TRACKBALL ICON"), "ShowTrackballIconOnGames", true, [s] { s->setVariable("reloadAll", true); });
+	s->addSwitch(_("SHOW SPINNER ICON"), "ShowSpinnerIconOnGames", true, [s] { s->setVariable("reloadAll", true); });
 	s->addSwitch(_("SHOW FILENAMES INSTEAD"), "ShowFilenames", true, [s] 
 		{
 			SystemData::resetSettings();
