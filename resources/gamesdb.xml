@@ -4413,6 +4413,9 @@
     <game id="tickee">
       <gun/>
     </game>
+    <game id="tierras">
+      <gun/>
+    </game>
     <game id="timecris">
       <gun/>
     </game>
@@ -6222,6 +6225,10 @@
     <game id="extremeg">
       <controller rumble="true"/>
       <wheel wheel="joystick1left" rotation="180" accelerate="z" brake="b" downshift="a"/>
+    </game>
+    <game id="mariokart64ampedup">
+      <video widescreen="true"/>
+      <wheel wheel="joystick1left" rotation="200" accelerate="a" brake="b" deadzone="25" midzone="1"/>
     </game>
     <game id="mariokart64">
       <wheel wheel="joystick1left" rotation="200" accelerate="a" brake="b" deadzone="25" midzone="1"/>
