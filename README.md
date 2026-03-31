@@ -1,6 +1,6 @@
 <h1 align="left">
   <br>
-  <a href="https://www.retrobat.org/"><img src="https://github.com/RetroBat-Official/retrobat/blob/main/system/resources/retrobat_logo_v7.png" alt="retrobat" width="500"></a>
+  <a href="https://www.retrobat.org/"><img src="https://github.com/RetroBat-Official/retrobat/blob/main/resources/retrobat_logo.png" alt="retrobat" width="500"></a>
 </h1>
 <p align="left">
   <a href="https://discord.gg/GVcPNxwzuT">
