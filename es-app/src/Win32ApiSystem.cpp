@@ -26,8 +26,15 @@
 #pragma comment(lib, "comsuppw.lib" ) // link with "comsuppw.lib" (or debug version: "comsuppwd.lib")
 #pragma comment(lib, "ws2_32.lib")
 
-#define VERSIONURL "https://github.com/fabricecaruso/batocera-emulationstation/releases/download/continuous-stable/version.info"
-#define UPDATEURL  "https://github.com/fabricecaruso/batocera-emulationstation/releases/download/continuous-stable/EmulationStation-Win32.zip"
+// Win32 builds are published by RetroBat-Official/emulationstation. Every update channel uses
+// its 'continuous-master' release : it is the build RetroBat itself installs (see
+// emulationstation_url in RetroBat-Official/retrobat's build.ini) and the only one still
+// refreshed, 'continuous-stable' has not been rebuilt since 2023 so offering it as an update
+// would downgrade an up to date installation.
+#define RELEASEURL "https://github.com/RetroBat-Official/emulationstation/releases/download/continuous-master/"
+
+#define VERSIONURL RELEASEURL "version.info"
+#define UPDATEURL  RELEASEURL "EmulationStation-Win32.zip"
 
 #define LAUNCHERURL "https://github.com/fabricecaruso/batocera-ports/releases/download/continuous/batocera-ports.zip"
 
@@ -49,17 +56,6 @@ void Win32ApiSystem::deinit()
 		CloseHandle(m_hJob);
 		m_hJob = NULL;
 	}
-}
-
-std::string getUrlFromUpdateType(std::string url)
-{
-	std::string updatesType = Settings::getInstance()->getString("updates.type");
-	if (updatesType == "beta")
-		return Utils::String::replace(url, "continuous-stable", "continuous-master");
-	else if (updatesType == "unstable")
-		return Utils::String::replace(url, "continuous-stable", "continuous-beta");
-
-	return url;
 }
 
 bool Win32ApiSystem::isScriptingSupported(ScriptId script)
@@ -794,7 +790,7 @@ std::pair<std::string, int> Win32ApiSystem::updateSystem(const std::function<voi
 		}
 	}
 
-	std::string url = getUrlFromUpdateType(UPDATEURL);
+	std::string url = UPDATEURL;
 
 	std::string fileName = Utils::FileSystem::getFileName(url);
 	std::string path = Paths::getUserEmulationStationPath() + "/update";
@@ -918,7 +914,7 @@ bool Win32ApiSystem::canUpdate(std::vector<std::string>& output)
 		localVersion = Utils::String::replace(Utils::String::replace(localVersion, "\r", ""), "\n", "");
 	}
 
-	HttpReq httpreq(getUrlFromUpdateType(VERSIONURL));
+	HttpReq httpreq(VERSIONURL);
 	if (httpreq.wait())
 	{
 		std::string serverVersion = httpreq.getContent();
