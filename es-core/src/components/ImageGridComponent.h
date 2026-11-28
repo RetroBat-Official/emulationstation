@@ -2536,7 +2536,8 @@ void ImageGridComponent<T>::calcGridDimension()
 			y = Math::max(1.0f, y);
 
 			// Width derived from the height, to keep the tiles' shape
-			x = Math::min(y * ratio, availableW);
+			auto tmpY = (availableH - (rows - 1) * mMargin.y()) / rows;
+			x = Math::min(tmpY * ratio, availableW);
 
 			// Fully visible columns (used for the bands' horizontal scroll)
 			mGridDimension.x() = Math::max(1, (int)Math::floorf((availableW + mMargin.x()) / (x + mMargin.x())));
