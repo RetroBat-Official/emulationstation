@@ -2,6 +2,7 @@
 
 #include "GuiComponent.h"
 #include "components/MenuComponent.h"
+#include <map>
 
 template<typename T>
 class OptionListComponent;
@@ -18,6 +19,7 @@ public:
 
 private:
 	void start();
+	void startInternal(const std::string& device, std::map<std::string, std::string> info);
 
 	MenuComponent mMenu;
 	std::shared_ptr< OptionListComponent<std::string> >moptionsStorage;

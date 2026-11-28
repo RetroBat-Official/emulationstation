@@ -214,7 +214,9 @@ public:
     virtual std::pair<std::string, int> updateSystem(const std::function<void(const std::string)>& func = nullptr, bool fromlocalmedia = false);
 
     std::pair<std::string, int> backupSystem(BusyComponent* ui, std::string device);
-    std::pair<std::string, int> installSystem(BusyComponent* ui, std::string device, std::string architecture);
+    std::pair<std::string, int> installSystem(const std::function<void(const std::string)>& func, std::string device, std::string architecture, std::string options = "");
+    std::map<std::string, std::string> getInstallDiskInfo(const std::string& device);
+    bool isInstallPowerConnected();
     std::pair<std::string, int> scrape(BusyComponent* ui);
 
     virtual bool ping();
