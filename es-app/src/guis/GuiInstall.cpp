@@ -85,7 +85,7 @@ void GuiInstall::update(int deltaTime) {
 
 void GuiInstall::threadInstall() 
 {
-    std::pair<std::string,int> updateStatus = ApiSystem::getInstance()->installSystem(&mBusyAnim, mstorageDevice, marchitecture);
+    std::pair<std::string,int> updateStatus = ApiSystem::getInstance()->installSystem([this](const std::string info) { mBusyAnim.setText(info); }, mstorageDevice, marchitecture);
     if(updateStatus.second == 0){
         this->onInstallOk();
     }else {

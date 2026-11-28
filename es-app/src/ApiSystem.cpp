@@ -348,11 +348,13 @@ std::pair<std::string, int> ApiSystem::backupSystem(BusyComponent* ui, std::stri
 	return std::pair<std::string, int>(std::string(line), exitCode);
 }
 
-std::pair<std::string, int> ApiSystem::installSystem(BusyComponent* ui, std::string device, std::string architecture) 
+std::pair<std::string, int> ApiSystem::installSystem(const std::function<void(const std::string)>& func, std::string device, std::string architecture, std::string options) 
 {
 	LOG(LogDebug) << "ApiSystem::installSystem";
 
 	std::string updatecommand = "batocera-install install " + device + " " + architecture;
+	if (!options.empty())
+		updatecommand += " " + options;
 	FILE *pipe = popen(updatecommand.c_str(), "r");
 	if (pipe == NULL)
 		return std::pair<std::string, int>(std::string("Cannot call install command"), -1);
@@ -363,8 +365,12 @@ std::pair<std::string, int> ApiSystem::installSystem(BusyComponent* ui, std::str
 	while (fgets(line, 1024, pipe)) 
 	{
 		strtok(line, "\n");
-		if (flog != NULL) fprintf(flog, "%s\n", line);
-		ui->setText(std::string(line));
+		if (flog != NULL)
+		{
+			fprintf(flog, "%s\n", line);
+			fflush(flog);
+		}
+		func(std::string(line));
 	}
 
 	int exitCode = WEXITSTATUS(pclose(pipe));
@@ -781,6 +787,29 @@ std::vector<std::string> ApiSystem::getAvailableBackupDevices()
 std::vector<std::string> ApiSystem::getAvailableInstallDevices() 
 {
 	return executeEnumerationScript("batocera-install listDisks");
+}
+
+std::map<std::string, std::string> ApiSystem::getInstallDiskInfo(const std::string& device)
+{
+	std::map<std::string, std::string> info;
+
+	for (auto line : executeEnumerationScript("batocera-install checkDisk " + device))
+	{
+		auto pos = line.find('=');
+		if (pos != std::string::npos)
+			info[line.substr(0, pos)] = line.substr(pos + 1);
+	}
+
+	return info;
+}
+
+bool ApiSystem::isInstallPowerConnected()
+{
+	for (auto line : executeEnumerationScript("batocera-install checkPower"))
+		if (line == "POWER_CONNECTED=1")
+			return true;
+
+	return false;
 }
 
 std::vector<std::string> ApiSystem::getAvailableInstallArchitectures() 
