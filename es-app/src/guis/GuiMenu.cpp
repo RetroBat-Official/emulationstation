@@ -1682,13 +1682,13 @@ void GuiMenu::openSystemSettings()
 	}
 #endif
 
+#ifdef BATOCERA
 	// ROMM : shows the RomM menu, and RomM games once this device is paired and synchronized
 	s->addSwitch(_("ENABLE ROMM INTEGRATION"), Romm::CONF_ENABLED, false, [window]
 	{
 		window->postToUiThread([window] { GuiRommSettings::onIntegrationToggled(window); });
 	});
 
-#ifdef BATOCERA
 	s->addGroup(_("HARDWARE"));
 #endif
 
